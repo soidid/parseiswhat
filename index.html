@@ -83,8 +83,21 @@
           } else {
             alert("User logged in through Facebook!");
             console.log(user);
-            var node = document.createTextNode(user.toString());
+            var node = document.createTextNode(Parse.User.current());
+            console.log(Parse.User.current());
             document.getElementById("user").appendChild(node);
+
+            if (!Parse.FacebookUtils.isLinked(user)) {
+              Parse.FacebookUtils.link(user, null, {
+                success: function(user) {
+                  alert("Woohoo, user logged in with Facebook!");
+
+                },
+                error: function(user, error) {
+                  alert("User cancelled the Facebook login or did not fully authorize.");
+                }
+              });
+            }
           }
         },
         error: function(user, error) {
